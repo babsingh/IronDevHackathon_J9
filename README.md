@@ -1,6 +1,23 @@
 # IronDevHackathon_J9
 Goal: To create a communication system to relay events and news to IBMers around the lab using mobile devices. 
 
+### Instructions on starting the server (express app)
+
+1) One time setup:
+- Install express: "npm install -g express"
+- Install express-generator: "npm install -g express-generator"
+- Install nodemon: "npm install -g nodemon" (Mac would need "sudo")
+  * nodemon updates the express app in realtime so you don't have to restart the app whenever a change is made
+- Create a "data" directory for mongoDB (outside git repo or include it in .gitignore)
+	
+2) Install/update express app dependencies in package.json: "npm install"
+
+3) Start mongoDB server locally in a separate terminal: "mongod --dbpath $PATH_TO_DATA_DIR"
+
+4) Go to the root of the express app: "cd $GIT_WORKSPACE/server"
+
+5) Start the express app: "npm start"
+
 ### Environment Setup
 
 1) Install Android SDK (Tools Only; Don't get Android Studio; Will be using Eclipse)
