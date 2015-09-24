@@ -38,6 +38,7 @@ Goal: To create a communication system to relay events and news to IBMers around
 	* ios: "ionic emulate ios"
 - On device [Do step 4 for Android device]: 
 	* android: "ionic run android"
+		* Alternative: Find "*.apk" in "$IONIC_WORKSPACE/platforms/android/". Then, "adb install $PATH_TO_APK".
 	* ios: Open XCode project from "$IONIC_WORKSPACE/platforms/ios/". Then, start the simulator from XCode.
 
 4) One time setup (if you have a android device)
