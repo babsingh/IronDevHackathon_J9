@@ -1,5 +1,5 @@
 applications:
-- path: ./server
+- path: /server
   memory: 256M
   instances: 2
   domain: mybluemix.net
