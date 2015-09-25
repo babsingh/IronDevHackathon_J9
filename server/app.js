@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var express_session = require('express-session');
 
 var mongoose = require('mongoose');
-var connection = mongoose.connect('mongodb://localhost/j9_irondev');
 
 require('./models/user_model.js');
 
@@ -15,6 +14,10 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
 var signup = require('./routes/signup');
+
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require('cfenv');
 
 var app = express();
 
@@ -31,10 +34,41 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+// Process the Environment Variable - VCAP_SERVICES
+var services = JSON.parse(process.env.VCAP_SERVICES);
+  
+// Connect to the DB
+if (appEnv === 'development') {
+  var connection = mongoose.connect('mongodb://localhost/j9_irondev');
+} else if (appEnv === 'production') {
+  var service_name = 'MongoLab-82';
+  if (services[service_name]) {
+    var svc = services[service_name][0].credentials;
+    var connection = mongoose.connect(svc.uri);
+  } else {
+    console.log('The service '+service_name+' is not in the VCAP_SERVICES. Did you forget to bind it?');
+  }
+} else {
+      err = 'Unkown environment';
+}
+
+
 app.use(express_session({
   secret: 'SECRET',
   cookie: {maxAge: 3600*1000},
+  resave: true,
+  saveUninitialized: true
 }));
+
+// start server on the specified port and binding host
+app.listen(appEnv.port, function() {
+
+  // print a message when the server starts listening
+  console.log("server starting on " + appEnv.url);
+});
 
 app.use('/', routes);
 app.use('/users', users);
