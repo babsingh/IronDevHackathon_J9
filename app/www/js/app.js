@@ -1,42 +1,73 @@
-// Ionic Starter App
 
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'app.controllers', 'app.services'])
+// Main Application JS
+
+angular.module("irondev-j9", ["ionic", "irondev-j9.controllers", "irondev-j9.services", "irondev-j9.directives"])
 
 .run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
+
+	$ionicPlatform.ready(function() {
+
+		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+		// for form inputs)
+		if(window.cordova && window.cordova.plugins.Keyboard) {
+			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+		}
+		if(window.StatusBar) {
+			// org.apache.cordova.statusbar required
+			StatusBar.styleDefault();
+		}
+
+	});
+
 })
 
-.config(function ($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+
     $stateProvider
 
-        .state('login', {
-              url: '/login',
-              templateUrl: 'templates/login.html',
-              controller: 'LoginCtrl'
-        })
+    .state("get-started", {
+        abstract: true,
+        url: "/get-started",
+        controller: "GetStartedCtrl",
+        templateUrl: "templates/get-started/get-started-view.html"
+    })
 
-        .state('signup', {
-              url: '/signup',
-              templateUrl: 'templates/signup.html',
-              controller: 'SignupCtrl'
-        })
+    .state("get-started.welcome", {
+        url: "/welcome",
+        views: {
+            "get-started": {
+                templateUrl: "templates/get-started/welcome-view.html",
+                controller: "WelcomeCtrl"
+            }
+        }
+    })
 
-        .state('home', {
-              url: '/home',
-              templateUrl: 'templates/home.html'
-        })
+    .state("get-started.create-profile", {
+        url: "/create-profile",
+        views: {
+            "get-started": {
+                templateUrl: "templates/get-started/create-profile-view.html",
+                controller: "CreateProfileCtrl"
+            }
+        }
+    })
 
-    $urlRouterProvider.otherwise('/login');
-})      
+    .state("get-started.user-created", {
+        url: "/user-created",
+        views: {
+            "get-started": {
+                templateUrl: "templates/get-started/user-created-view.html",
+                controller: "UserCreatedCtrl"
+            }
+        }
+    })
+
+    ;
+
+    // Use the auth token interceptor to append the auth_token to every request
+    $httpProvider.interceptors.push('AuthTokenInterceptor');
+
+    // Fallback to this route
+    $urlRouterProvider.otherwise("/get-started/welcome");
+
+});
