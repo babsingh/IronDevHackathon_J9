@@ -16,10 +16,10 @@ Goal: To create a communication system to relay events and news to IBMers around
 
 4) Go to the root of the express app: "cd $GIT_WORKSPACE/server"
 
-5) Start the express app: "npm start"
+5) Start the express app: "npm start" or "gulp"
 
-6) In the browser, load the app: "localhost:3000/"
-- Change port (=3000) by editing bin/www
+6) In the browser, load the app: "localhost:8080/"
+- Change port (=8080) by editing bin/www
 
 ### Instructions on starting the ionic app ("sudo" may be needed on Mac):
 
