@@ -4,17 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require('cfenv');
 
 if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'development'
 }
+
+var mongoose = require('mongoose');
 
 process.on("uncaughtException", function(error, stack){
 	console.log("Uncaught Error");
 	console.log(error.stack);
 });
 
-var conf = require('./configure');
 var app = express();
 
 // view engine setup
@@ -24,14 +28,26 @@ app.locals.delimiters = '<% %>';
 
 // Database connection
 var mongoose = require('mongoose');
-mongoose.connect(conf.mongo_config.connect_string(), { db: { safe:true } }, function(err){
-  if (err) {
-    throw err;
+
+// get the app environment from Cloud Foundry
+var appEnv = cfenv.getAppEnv();
+
+// Connect to the DB
+if (appEnv === 'development') {
+  var connection = mongoose.connect('mongodb://localhost/j9_irondev');
+} else if (appEnv === 'production') {
+  // Process the Environment Variable - VCAP_SERVICES
+  var services = JSON.parse(process.env.VCAP_SERVICES);
+  var service_name = 'MongoLab-82';
+  if (services[service_name]) {
+    var svc = services[service_name][0].credentials;
+    var connection = mongoose.connect(svc.uri);
+  } else {
+    console.log('The service '+service_name+' is not in the VCAP_SERVICES. Did you forget to bind it?');
   }
-  else {
-    console.log('Mongoose Connected');
-  }
-});
+} else {
+      err = 'Unkown environment';
+}
 
 mongoose.connection.on("error", function(err){
   console.log("Mongoose error:", err);
@@ -56,6 +72,12 @@ app.use('/api', require('./api'));
 
 app.get('/', function(req, res){
 	res.send('irondevhackathon-j9');
+});
+
+// start server on the specified port and binding host
+app.listen(appEnv.port, function() {
+  // print a message when the server starts listening
+  console.log("server starting on " + appEnv.url);
 });
 
 // catch 404 and forward to error handler

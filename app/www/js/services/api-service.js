@@ -15,7 +15,7 @@ angular.module('irondev-j9.services')
 		// User Routes
 		user: {
 			get: baseUserRoute + '/get'
-			, create: baseUserRoute + '/create'
+			, create: baseUserRoute + '/signup'
 			, login: baseUserRoute +'/login'
 		}
 

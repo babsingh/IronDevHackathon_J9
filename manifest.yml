@@ -1,0 +1,11 @@
+applications:
+- path: /server
+  memory: 256M
+  instances: 2
+  domain: mybluemix.net
+  name: J9hack
+  host: j9hack
+  disk_quota: 1024M
+  timeout: 30
+  env:
+    env_type: production

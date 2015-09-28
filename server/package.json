@@ -1,9 +1,8 @@
 {
   "name": "server",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
@@ -26,6 +25,11 @@
     "request": "^2.64.0",
     "serve-favicon": "*",
     "spooky": "^0.2.5",
-    "validator": "^3.43.0"
+    "validator": "^3.43.0",
+    "cfenv": "1.0.x"
+  },
+  "repository": {},
+  "engines": {
+    "node": "0.12.x"
   }
 }
