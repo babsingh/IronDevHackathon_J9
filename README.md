@@ -92,3 +92,9 @@ Goal: To create a communication system to relay events and news to IBMers around
 - Install Ionic: npm install –g ionic
 - Update Cordova: npm update cordova
 - Update Ionic: npm update ionic
+
+### Deploying to Bluemix
+
+1) git remote add jazzhub https://hub.jazz.net/git/adambrousseau/J9hack
+ Pushing to Jazzhub will autodeploy onto Bluemix
+2) git push jazzhub master
