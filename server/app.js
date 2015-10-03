@@ -72,7 +72,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', require('./api'));
 
 app.get('/', function(req, res){
-	res.send('irondevhackathon-j9');
+	res.send('irondevhackathon-j9-autotest');
 });
 
 // start server on the specified port and binding host
