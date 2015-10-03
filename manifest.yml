@@ -1,5 +1,6 @@
 applications:
-- path: /server
+- path: ./server
+  command: node app.js
   memory: 256M
   instances: 2
   domain: mybluemix.net
