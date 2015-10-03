@@ -6,7 +6,7 @@ var userRoute = require('../routes/user_routes');
 var RouteAuth = require('../util/route_auth');
 
 // Base user api routes
-userApi.post('/signup', userRoute.create);
+userApi.post('/create', userRoute.create);
 userApi.post('/login', userRoute.login);
 userApi.get('/get', RouteAuth.protect, userRoute.get);
 

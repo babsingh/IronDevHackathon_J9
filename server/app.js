@@ -32,22 +32,23 @@ var mongoose = require('mongoose');
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
 
+var connection = mongoose.connect('mongodb://localhost/j9_irondev');
 // Connect to the DB
-if (appEnv === 'development') {
-  var connection = mongoose.connect('mongodb://localhost/j9_irondev');
-} else if (appEnv === 'production') {
-  // Process the Environment Variable - VCAP_SERVICES
-  var services = JSON.parse(process.env.VCAP_SERVICES);
-  var service_name = 'MongoLab-82';
-  if (services[service_name]) {
-    var svc = services[service_name][0].credentials;
-    var connection = mongoose.connect(svc.uri);
-  } else {
-    console.log('The service '+service_name+' is not in the VCAP_SERVICES. Did you forget to bind it?');
-  }
-} else {
-      err = 'Unkown environment';
-}
+// if (appEnv === 'development') {
+//   var connection = mongoose.connect('mongodb://localhost/j9_irondev');
+// } else if (appEnv === 'production') {
+//   // Process the Environment Variable - VCAP_SERVICES
+//   var services = JSON.parse(process.env.VCAP_SERVICES);
+//   var service_name = 'MongoLab-82';
+//   if (services[service_name]) {
+//     var svc = services[service_name][0].credentials;
+//     var connection = mongoose.connect(svc.uri);
+//   } else {
+//     console.log('The service '+service_name+' is not in the VCAP_SERVICES. Did you forget to bind it?');
+//   }
+// } else {
+//       err = 'Unkown environment';
+// }
 
 mongoose.connection.on("error", function(err){
   console.log("Mongoose error:", err);
@@ -79,37 +80,3 @@ app.listen(appEnv.port, function() {
   // print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
-
-
-module.exports = app;
