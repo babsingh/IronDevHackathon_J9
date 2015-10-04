@@ -68,11 +68,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Allow server to receive requests from other devices
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Api
 app.use('/api', require('./api'));
 
 app.get('/', function(req, res){
-	res.send('irondevhackathon-j9-autotest');
+	res.send('irondevhackathon-j9-autotest1');
 });
 
 // start server on the specified port and binding host
